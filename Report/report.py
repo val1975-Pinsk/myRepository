@@ -2,6 +2,7 @@ from reportClass import *
 from reportLib import *
 	
 report = Report()
+message = Message()
 
 def getReportData():
 	while(True):
@@ -28,13 +29,13 @@ def getReportData():
 while(True):
 	filesInDir = getFilesInDir()
 	if len(filesInDir) == 0:
-		print("Нет файлов для отчёта!")
+		message.list_empty()
 		break
 	for unit in filesInDir:
 		print(unit)
 	reportData = getReportData()
 	if reportData == "finish":
-		print("Программа завершает работу...")
+		message.completed()
 		break
 	else:
 		#	Составление отчёта.
