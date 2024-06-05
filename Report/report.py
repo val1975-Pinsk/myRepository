@@ -21,45 +21,62 @@ def getReportData():
 			answer = input("Ошибка. Попробовать ещё раз (y/n)? ")
 			if answer == "n" or answer == "н":
 				return "finish"
+				
+
+def getFilesInDir():
+	'''
+		Получаем список файлов в текущем директории.
+	Выбираем файлы с расширением *.txt.
+	'''
+	filesInDir = os.listdir(".")
+	patternList = ["*.txt", "*.html"]
+	files = []
+	for item in patternList:
+		for entry in filesInDir:
+			if fnmatch.fnmatch(entry, item):
+				#print(entry)
+				files.append(entry)
+	return files
+	
+	
 '''
-	Получаем список файлов в текущем директории.
-Выбираем файлы с расширением *.txt.
+	Основной цикл программы.
 '''
-filesInDir = os.listdir(".")
-patternList = ["*.txt", "*.html"]
-for item in patternList:
-    for entry in filesInDir:
-	    if fnmatch.fnmatch(entry, item):
-		    print(entry)
 while(True):
-    reportData = getReportData()
-    if reportData == "finish":
-        print("Программа завершает работу...")
-        break
-    else:
-        #	Составление отчёта.
-        report = []
-        for string in reportData:
+	filesInDir = getFilesInDir()
+	if len(filesInDir) == 0:
+		print("Нет файлов для отчёта!")
+		break
+	for unit in filesInDir:
+		print(unit)
+	reportData = getReportData()
+	if reportData == "finish":
+		print("Программа завершает работу...")
+		break
+	else:
+		#	Составление отчёта.
+		report = []
+		for string in reportData:
 		#	Определение содержания строки
-                if sringIsHeader(string):
-                #	Заголовочная строка.
-                        dirReport = newDirReport(string)
-                        report.append(dirReport)
-                elif stringIsSubHeader(string):
-                #	Вторая часть заголовка.
-                        dirReport.setSubHeader(string)
-                elif stringIsRecervedCount(string):
-                #	Количество заказаных мест.
-                        passenger = Passenger()
-                        passenger.recerved = getRecervCntValFromStr(string)
-                elif stringIsFulfilledStatus(string):
-                #	Статус заказа.
-                        passenger.fulfilled = getFulfilledStatus(string)
-                elif stringIsRemark(string):
-                #	Пояснения к заказу.
-                        passenger.remark = getRemarkFromString(string)
-                        dirReport.passengers.append(passenger)
-        for report_ in report:
-                report_.display()
-        input("Составить ещё отчёт?(д/н) ")
-        break
+			if sringIsHeader(string):
+			#	Заголовочная строка.
+				dirReport = newDirReport(string)
+				report.append(dirReport)
+			elif stringIsSubHeader(string):
+			#	Вторая часть заголовка.
+				dirReport.setSubHeader(string)
+			elif stringIsRecervedCount(string):
+			#	Количество заказаных мест.
+				passenger = Passenger()
+				passenger.recerved = getRecervCntValFromStr(string)
+			elif stringIsFulfilledStatus(string):
+			#	Статус заказа.
+				passenger.fulfilled = getFulfilledStatus(string)
+			elif stringIsRemark(string):
+			#	Пояснения к заказу.
+				passenger.remark = getRemarkFromString(string)
+				dirReport.passengers.append(passenger)
+		for report_ in report:
+			report_.display()
+		input("Составить ещё отчёт?(д/н) ")
+		break
