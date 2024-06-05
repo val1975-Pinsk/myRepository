@@ -1,4 +1,3 @@
-import os, fnmatch
 from reportClass import *
 from reportLib import *
 	
@@ -23,22 +22,6 @@ def getReportData():
 				return "finish"
 				
 
-def getFilesInDir():
-	'''
-		Получаем список файлов в текущем директории.
-	Выбираем файлы с расширением *.txt.
-	'''
-	filesInDir = os.listdir(".")
-	patternList = ["*.txt", "*.html"]
-	files = []
-	for item in patternList:
-		for entry in filesInDir:
-			if fnmatch.fnmatch(entry, item):
-				#print(entry)
-				files.append(entry)
-	return files
-	
-	
 '''
 	Основной цикл программы.
 '''

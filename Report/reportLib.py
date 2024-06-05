@@ -1,5 +1,22 @@
 from reportClass import *
+import os, fnmatch
 
+def getFilesInDir():
+	'''
+		Получаем список файлов в текущем директории.
+	Выбираем файлы с расширением *.txt.
+	'''
+	filesInDir = os.listdir(".")
+	patternList = ["*.txt", "*.html"]
+	files = []
+	for item in patternList:
+		for entry in filesInDir:
+			if fnmatch.fnmatch(entry, item):
+				#print(entry)
+				files.append(entry)
+	return files
+	
+	
 def convertDate(date):
 	month = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
 	subDate = date.split("-")
