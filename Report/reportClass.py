@@ -1,3 +1,15 @@
+class Message:
+    def __init__(self):
+        self.programm_completed = "Программа завершает работу..."
+        self.list_is_empty = "Нет файлов для отчёта..."
+    
+    def completed(self):
+        print(self.programm_completed)
+    
+    def list_empty(self):
+        print(self.list_is_empty)
+
+
 class Passenger:
 	def __init__(self):
 		self.recerved = 0
