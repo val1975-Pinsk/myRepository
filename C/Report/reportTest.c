@@ -4,7 +4,7 @@
 
 struct message messg = { ERR, SUCS } ;
 char * fileName = "Водители.html" ;
-char string [ 200 ] ;
+char buffer [ 256 ] ;
 char *p_string ;
 
 void main ( void ) {
@@ -16,6 +16,7 @@ void main ( void ) {
         } else {
                 printf ( "%s", messg.sucs ) ;
                 //      Чтение строки из файла
+                
                 p_string = fgets ( string, sizeof ( string ), p_f ) ;
                 printf ( "%s", p_string ) ;
         }
