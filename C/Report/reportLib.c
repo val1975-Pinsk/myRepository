@@ -47,65 +47,25 @@ int isDigit ( int c ){
                 return 1;
         } else return 0;
 }
-/*
-
-struct message {
-        char * err_openf;
-        char * complete ;
-} ;
-struct message messg = { "ошибка.\n", "выполнено.\n"} ;
-char *fileName = "Водители.html" ;
-char string [ 200 ] ;
-char str [ 200 ] ;
-char *p_string ;
-char *p_str ;
-int writeStr = no ;
-
-int main ( void ) {
-        printf ( "Открытие файла:\n");
-        printf ( "%s\n", fileName ) ;
-        FILE *p_f = fopen ( fileName, "r" ) ;
-        if ( p_f == NULL ) {
-                printf ( "%s", messg.err_openf ) ;
-                return -1 ;
-        } else {
-                printf ( "%s", messg.complete ) ;
-                //      Чтение строки из файла
-                p_string = fgets ( string, sizeof ( string ), p_f ) ;           
-                if ( p_string == NULL ) {
-                        if ( feof ( p_f ) != 0 ) {
-                                printf ( "\nЧтение файла закончено\n" ) ;
-                                return 1 ;
-                        } else {
-                                printf ( "\nОшибка чтения из файла\n" ) ;
-                                return -1 ;
+/**/
+void printStr (char *p_b, int size){
+        for (int c = 0; c < size; c++) {
+                printf("%c", *p_b);
+                p_b ++;
+        }
+}
+/**/
+int strInStr(char * str, char * pattern){
+        char * ptn = pattern;
+        while(*str != '\0'){
+                if(*str == *ptn){
+                        *(ptn++);
+                        if(*ptn == '\0'){
+                                return 1;
                         }
-                } else {
-                //        Здесь происходит обработка строки.
-                        int p_strLen = strlen( p_string ) ;
-                        for ( int i = 0; i < p_strLen - 1; i++) {
-                                if (*( p_string + i) == CloseTag ) {
-                                        writeStr = no ;
-                                }
-                                if ( writeStr == yes ) {
-                                        printf ( "%c", p_string[ i ]) ;
-                                }
-                                if ( *( p_string + i) == OpenTag ) {
-                                        writeStr = yes ;
-                                }
-                        }
-                        //return 1 ;
-                }
-                printf ( "Закрытие файла:") ;
-                if ( fclose ( p_f ) == EOF ) {
-                        printf ( " ошибка.\n" ) ;
-                        return -1 ;
-                }else {
-                        printf ( " выполнено.\n" ) ;
-                        return 1 ;
-                }
-        }        
-} 
-*/
-
+                }else ptn = pattern;
+                *(str++);
+        }
+        return 0;
+};
 

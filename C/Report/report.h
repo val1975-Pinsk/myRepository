@@ -9,15 +9,23 @@
 
 struct message {
         char * err;
-        char * sucs ;
+        char * sucs;
 } ;
+/*
+        Функция проверяет содержит ли строка подстроку.
+Функция принимает указатель на искомую строку str и указатель на шаблон pattern.
+Возвращаемое значение:
+        1-строка содержит шаблон;
+        0-не содержит.        
+*/
+extern int strInStr(char *str, char *pattern);
 /**/
-extern int getMonthDigit () ;
-extern int getMonthDigit_2 () ;
+extern int getMonthDigit ();
+extern int getMonthDigit_2 ();
 /*
         Функция проверяет является ли символ числом.
 Функция возвращает 1 - если символ число, иначе возвращается 0.
 */
-extern int isDigit ( int c ) ;
+extern int isDigit ( int c );
 /**/
-//extern char getStrContent ( char *str ) ;
+extern void printStr (char *p_b, int size);
