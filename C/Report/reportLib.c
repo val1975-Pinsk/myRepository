@@ -54,7 +54,9 @@ void printStr (char *p_b, int size){
                 p_b ++;
         }
 }
-/**/
+/*
+        Функция ищет подстроку pattern в искомой строке str. Если находит возращает 1, иначе 0.
+*/
 int strInStr(char * str, char * pattern){
         char * ptn = pattern;
         while(*str != '\0'){
