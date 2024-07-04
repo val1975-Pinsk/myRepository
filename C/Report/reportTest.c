@@ -7,6 +7,16 @@ char * fileName = "Водители.html";
 char buffer [ 256 ];
 char * p_b = buffer;
 
+char* movePointerToChar(char * p_b, char chr, int display){
+        while(1){
+                if(*p_b == chr){
+                        *(p_b++); 
+                        return p_b;
+                }
+                if(display) printf("%c", *p_b);
+                *(p_b++);
+        }
+}
 void main ( void ) {
         printf ( "Открытие файла:\n");
         printf ( "%s\n", fileName ) ;
@@ -21,23 +31,10 @@ void main ( void ) {
                                 char * pattern;
                                 if(strInStr(p_b, pattern = "Пинск")){           //Здесь ищем строку с названием маршрута.
                                         //Перемещаем указатель к началу содержимого строки/
-                                        while(1){
-                                                if(*p_b == CloseTag){
-                                                        *(p_b++);        
-                                                        break;
-                                                }
-                                                *(p_b++);
-                                        }
+                                        p_b = movePointerToChar(p_b, CloseTag, 0);
                                         printf("Дата: \t\t   ");
-                                        while(1){
-                                                if(*p_b == ','){
-                                                        *(p_b += 2);
-                                                        break;
-                                                }
-                                                printf("%c", *p_b);
-                                                *(p_b++);
-                                        }
-                                        printf("\nВремя отправления: ");
+                                        p_b = movePointerToChar(p_b, ',', 1);
+                                        printf("\nВремя отправления:");
                                         while(1){
                                                 if(*p_b == ','){
                                                         *(p_b += 2);
