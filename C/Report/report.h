@@ -1,5 +1,5 @@
-#define     OpenTag     60      //  Открывающий тег
-#define     CloseTag    62      //  Закрывающий тег
+#define     OpenTag     '<'      //  Открывающий тег 60
+#define     CloseTag    '>'      //  Закрывающий тег 62
 
 #define     yes         1       //  да - 1
 #define     no          0       //  нет - 0
@@ -11,6 +11,11 @@ struct message {
         char * err;
         char * sucs;
 } ;
+/*
+        Функция передвигает указатель до указанного символа chr.
+Возвращаемое значение указатель на следующий за указанным символом.
+*/
+extern char* movePointerToChar(char * p_b, char chr, int display);
 /*
         Функция проверяет содержит ли строка подстроку.
 Функция принимает указатель на искомую строку str и указатель на шаблон pattern.

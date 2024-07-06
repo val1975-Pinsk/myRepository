@@ -70,4 +70,26 @@ int strInStr(char * str, char * pattern){
         }
         return 0;
 };
+/*
+        Функция передвигает указатель до указанного символа chr.
+Принимаемые переменные:
+
+        char * p_b - указатель на начало строки;
+        char chr - символ до которого передвинуть указатель;
+        int display - 1:сдвиг с выводом в терминал;
+                      0:просто сдвиг.
+Возвращаемое значение:
+
+        указатель на следующий за указанным символом.
+*/
+char* movePointerToChar(char * p_b, char chr, int display){
+        while(1){
+                if(*p_b == chr){
+                        *(p_b++); 
+                        return p_b;
+                }
+                if(display) printf("%c", *p_b);
+                *(p_b++);
+        }
+}
 
