@@ -31,6 +31,8 @@ extern int getMonthDigit_2 ();
         Функция проверяет является ли символ числом.
 Функция возвращает 1 - если символ число, иначе возвращается 0.
 */
-extern int isDigit ( int c );
+extern int isDigit (int c);
 /**/
 extern void printStr (char *p_b, int size);
+/**/
+extern int charToDigit(char *p);
