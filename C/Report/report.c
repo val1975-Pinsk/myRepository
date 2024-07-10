@@ -3,15 +3,11 @@
 #include "report.h"
 
 struct message messg = { ERR, SUCS };
-struct reportPass {
-        int half;                                                       //      Количество пассажиров оплативших 17 рублей.
-        int discount;                                                   //      Количество пассажиров оплативших 30 рублей.
-        int full;                                                       //      Количество пассажиров оплативших 35 рублей.
-        int noCash;                                                     //      Количество пассажиров по безналу.
-};
+
 char * fileName = "Водители.html";
 char buffer [ 256 ];
 char * p_b;
+struct reportPass rPCount = {.half = 0, .discount = 0, .full = 0, .noCash = 0};
 
 void main ( void ) {
         printf ( "Открытие файла:\n");
@@ -21,7 +17,6 @@ void main ( void ) {
                 printf ( "%s", messg.err );
         } else {
                 printf ( "%s", messg.sucs );
-                struct reportPass rPCount = {.half = 0, .discount = 0, .full = 0, .noCash = 0};
                 char * colspan_5 = "colspan=\"5\"";
                 char * selected = "selected=\"selected\"";
                 char * width_25 = "width=\"25px\"";
