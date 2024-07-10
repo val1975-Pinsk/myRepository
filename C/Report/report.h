@@ -36,3 +36,6 @@ extern int isDigit (int c);
 extern void printStr (char *p_b, int size);
 /**/
 extern int charToDigit(char *p);
+/*      Функция подсчитывает количество вхождений подстроки pattern в строку.
+Функция возвращает количество вхождений.*/
+extern int strInStrCount(char * str, char * pattern);

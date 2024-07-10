@@ -119,4 +119,26 @@ int charToDigit(char *p){
         }
         return -1;
 }
+/*      Функция подсчитывает количество вхождений подстроки pattern в строку.
+Принимает переменные:
+        указатель на искомую строку char * str;
+        указатель на шаблон char * pattern.
+Функция возвращает количество вхождений.
+*/
+int strInStrCount(char * str, char * pattern){
+        char * ptn = pattern;
+        int count = 0;
+        while(*str != '\0'){
+                if(*str == *ptn){
+                        *(ptn++);
+                        if(*ptn == '\0'){
+                                count++;
+                                ptn = pattern;
+                        }
+                }else ptn = pattern;
+                *(str++);
+        }
+        return count;
+}
+
 

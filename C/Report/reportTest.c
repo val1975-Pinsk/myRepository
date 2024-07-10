@@ -4,42 +4,19 @@
 
 struct message messg = { ERR, SUCS };
 struct reportPass {
-        int half;
-        int discount;
-        int full;
-        int noCash;
+        int half;                                                       //      Количество пассажиров оплативших 17 рублей.
+        int discount;                                                   //      Количество пассажиров оплативших 30 рублей.
+        int full;                                                       //      Количество пассажиров оплативших 35 рублей.
+        int noCash;                                                     //      Количество пассажиров по безналу.
 };
 char * fileName = "Водители.html";
 char buffer [ 256 ];
 char * p_b;
-char * hlf = "17р";
-char * dsc = "Д.К.";
-char * dsc1 = "Дк";
-char * dsc2 = "д.к.";
-
-int strInStrCount(char * str, char * pattern){  //Ln 97
-        //printf("from strInStrCount: %s\n", str);
-        char * ptn = pattern;
-        int count = 0;
-        while(*str != '\0'){
-                if(*str == *ptn){
-                        *(ptn++);
-                        if(*ptn == '\0'){
-                                count++;
-                                ptn = pattern;
-                        }
-                }else ptn = pattern;
-                *(str++);
-        }
-        //printf("pattern: %s\n", pattern);
-        //printf("count: %d\n", count);
-        return count;
-}
 
 void main ( void ) {
         printf ( "Открытие файла:\n");
         printf ( "%s\n", fileName ) ;
-        FILE * p_f = fopen ( fileName, "r" );                                   //Открываем файл.
+        FILE * p_f = fopen ( fileName, "r" );                           //      Открываем файл.
         if ( p_f == NULL ) {
                 printf ( "%s", messg.err );
         } else {
@@ -49,14 +26,12 @@ void main ( void ) {
                 char * selected = "selected=\"selected\"";
                 char * width_25 = "width=\"25px\"";
                 char * endOfReport = "tr height=\"40px\"";
-                //char * pattern;
                 int go = no;
                 int count = 0;
                 int total;
                 while ((fgets(buffer, 256, p_f)) != NULL){
                         p_b = buffer;
-                        //go = no;
-                        if(strInStr(p_b, "Пинск")){           //Здесь ищем строку с названием маршрута."
+                        if(strInStr(p_b, "Пинск")){                     //      Здесь ищем строку с названием маршрута.
                                 printf("==================================================\n");
                                 //Перемещаем указатель к началу содержимого строки/
                                 p_b = movePointerToChar(p_b, CloseTag, 0);
@@ -66,22 +41,22 @@ void main ( void ) {
                                 p_b = movePointerToChar(p_b, ',', 1);
                                 printf("\nМаршрут: \t  ");
                                 p_b = movePointerToChar(p_b, OpenTag, 1);
+                                continue;
                         }
-                        if(strInStr(p_b, "свободно")){        //Здесь ищем строку с названием автомобиля.
+                        if(strInStr(p_b, "свободно")){                  //      Здесь ищем строку с названием автомобиля.
                                 p_b = movePointerToChar(p_b, CloseTag, 0);
                                 printf("\nЗанято: \t   ");
-                                //конвертируем количество занятых мест в числовое выражение.
-                                total = charToDigit(p_b);
-                                if(total != -1){
-                                        count = total;
-                                        *(p_b++);
-                                }
-                                total = charToDigit(p_b);
-                                if(total != -1){
-                                        count = count * 10 + total;
-                                        *(p_b++);
-                                }
-                                total = count;
+                                total = charToDigit(p_b);               //      Конвертируем количество занятых 
+                                if(total != -1){                        //мест в числовое выражение.
+                                        count = total;                  //
+                                        *(p_b++);                       //
+                                }                                       //
+                                total = charToDigit(p_b);               //
+                                if(total != -1){                        //
+                                        count = count * 10 + total;     //
+                                        *(p_b++);                       //
+                                }                                       //
+                                total = count;                          //
                                 p_b = movePointerToChar(p_b, ',', 1);
                                 printf(",");
                                 p_b = movePointerToChar(p_b, ',', 1);
@@ -89,51 +64,40 @@ void main ( void ) {
                                 p_b = movePointerToChar(p_b, OpenTag, 1);
                                 printf("\n");
                                 printf("__________________________________________________\n");
+                                continue;
                                 
                         }
                         if(strInStr(p_b, selected) && strInStr(p_b, "Поехал")){
-                                //printf("go!\n");
                                 go = yes;
+                                continue;
                         }
                         if(strInStr(p_b, colspan_5) && strInStr(p_b, "+")){
-                                //int count;
                                 p_b = buffer;
-                                count = strInStrCount(p_b, "Д.К.");   //Ln 20
-                                if(count != 0 && go == yes){
+                                if(go == yes){
+                                        count = strInStrCount(p_b, "Д.К.");
                                         rPCount.discount += count;
-                                }
-                                count = strInStrCount(p_b, "Дк");
-                                if(count != 0 && go == yes){
+                                        count = strInStrCount(p_b, "Дк");
                                         rPCount.discount += count;
-                                }
-                                count = strInStrCount(p_b, "д.к.");
-                                if(count != 0 && go == yes){
+                                        count = strInStrCount(p_b, "д.к.");
                                         rPCount.discount += count;
-                                }
-                                count = strInStrCount(p_b, "17р");
-                                if(count != 0 && go == yes){
+                                        count = strInStrCount(p_b, "дк");
+                                        rPCount.discount += count;
+                                        count = strInStrCount(p_b, "17р");
                                         rPCount.half += count;
-                                }
-                                count = strInStrCount(p_b, "дк");
-                                if(count != 0 && go == yes){
-                                        rPCount.discount += count;
-                                }
-                                count = strInStrCount(p_b, "бесплатно");
-                                if(count != 0 && go == yes){
-                                        rPCount.noCash += count;
-                                }
-                                count = strInStrCount(p_b, "б/н");
-                                if(count != 0 && go == yes){
+                                        count = strInStrCount(p_b, "бесплатно");
+                                        count = strInStrCount(p_b, "б/н");
                                         rPCount.noCash += count;
                                 }
                                 go = no;
+                                continue;
                         }
-                        if(strInStr(p_b, endOfReport)){
-                                printf("17р %d человек, сумма %d рублей\n", rPCount.half, rPCount.half * 17);
-                                printf("30р %d человек, сумма %d рублей\n", rPCount.discount, rPCount.discount * 30);
+                        if(strInStr(p_b, endOfReport)){                 //      Подводим итоги.
+                                printf("%d человек за 17р, сумма %d рублей\n", rPCount.half, rPCount.half * 17);
+                                printf("%d человек за 30р, сумма %d рублей\n", rPCount.discount, rPCount.discount * 30);
                                 rPCount.full = total - (rPCount.half + rPCount.discount + rPCount.noCash);
-                                printf("35р %d человек, сумма %d рублей\n", rPCount.full, rPCount.full * 35);
-                                printf("б/н или без оплаты %d человек\n", rPCount.noCash);
+                                printf("%d человек за 35р, сумма %d рублей\n", rPCount.full, rPCount.full * 35);
+                                printf("%d человек по б/н или без оплаты\n", rPCount.noCash);
+                                printf("\n\tИтого: %d рублей.\n", rPCount.half * 17 + rPCount.discount * 30 + rPCount.full * 35);
                                 rPCount.full = 0;
                                 rPCount.discount = 0;
                                 rPCount.noCash = 0;
