@@ -3,11 +3,18 @@
 #include "report.h"
 
 struct message messg = { ERR, SUCS };
+struct reportPass rPCount = {.half = 0, .discount = 0, .full = 0, .noCash = 0};
 
 char * fileName = "Водители.html";
 char buffer [ 256 ];
 char * p_b;
-struct reportPass rPCount = {.half = 0, .discount = 0, .full = 0, .noCash = 0};
+char * colspan_5 = "colspan=\"5\"";
+char * selected = "selected=\"selected\"";
+char * width_25 = "width=\"25px\"";
+char * endOfReport = "tr height=\"40px\"";
+int go = no;
+int count = 0;
+int total;
 
 void main ( void ) {
         printf ( "Открытие файла:\n");
@@ -17,13 +24,7 @@ void main ( void ) {
                 printf ( "%s", messg.err );
         } else {
                 printf ( "%s", messg.sucs );
-                char * colspan_5 = "colspan=\"5\"";
-                char * selected = "selected=\"selected\"";
-                char * width_25 = "width=\"25px\"";
-                char * endOfReport = "tr height=\"40px\"";
-                int go = no;
-                int count = 0;
-                int total;
+                
                 while ((fgets(buffer, 256, p_f)) != NULL){
                         p_b = buffer;
                         if(strInStr(p_b, "Пинск")){                     //      Здесь ищем строку с названием маршрута.
