@@ -44,7 +44,7 @@ void main ( void ) {
                 printf ( "%s", messg.err );
         } else {
                 printf ( "%s", messg.sucs );
-                struct reportPass rP = {.half = 0, .discount = 0, .full = 0, .noCash = 0};
+                struct reportPass rPCount = {.half = 0, .discount = 0, .full = 0, .noCash = 0};
                 char * colspan_5 = "colspan=\"5\"";
                 char * selected = "selected=\"selected\"";
                 char * width_25 = "width=\"25px\"";
@@ -100,44 +100,44 @@ void main ( void ) {
                                 p_b = buffer;
                                 count = strInStrCount(p_b, "Д.К.");   //Ln 20
                                 if(count != 0 && go == yes){
-                                        rP.discount += count;
+                                        rPCount.discount += count;
                                 }
                                 count = strInStrCount(p_b, "Дк");
                                 if(count != 0 && go == yes){
-                                        rP.discount += count;
+                                        rPCount.discount += count;
                                 }
                                 count = strInStrCount(p_b, "д.к.");
                                 if(count != 0 && go == yes){
-                                        rP.discount += count;
+                                        rPCount.discount += count;
                                 }
                                 count = strInStrCount(p_b, "17р");
                                 if(count != 0 && go == yes){
-                                        rP.half += count;
+                                        rPCount.half += count;
                                 }
                                 count = strInStrCount(p_b, "дк");
                                 if(count != 0 && go == yes){
-                                        rP.discount += count;
+                                        rPCount.discount += count;
                                 }
                                 count = strInStrCount(p_b, "бесплатно");
                                 if(count != 0 && go == yes){
-                                        rP.noCash += count;
+                                        rPCount.noCash += count;
                                 }
                                 count = strInStrCount(p_b, "б/н");
                                 if(count != 0 && go == yes){
-                                        rP.noCash += count;
+                                        rPCount.noCash += count;
                                 }
                                 go = no;
                         }
                         if(strInStr(p_b, endOfReport)){
-                                printf("17р %d человек\n", rP.half);
-                                printf("30р %d человек\n", rP.discount);
-                                rP.full = total - (rP.half + rP.discount + rP.noCash);
-                                printf("35р %d человек\n", rP.full);
-                                printf("б/н или без оплаты %d человек\n", rP.noCash);
-                                rP.full = 0;
-                                rP.discount = 0;
-                                rP.noCash = 0;
-                                rP.half = 0;
+                                printf("17р %d человек, сумма %d рублей\n", rPCount.half, rPCount.half * 17);
+                                printf("30р %d человек, сумма %d рублей\n", rPCount.discount, rPCount.discount * 30);
+                                rPCount.full = total - (rPCount.half + rPCount.discount + rPCount.noCash);
+                                printf("35р %d человек, сумма %d рублей\n", rPCount.full, rPCount.full * 35);
+                                printf("б/н или без оплаты %d человек\n", rPCount.noCash);
+                                rPCount.full = 0;
+                                rPCount.discount = 0;
+                                rPCount.noCash = 0;
+                                rPCount.half = 0;
                         }
                 }
         }
