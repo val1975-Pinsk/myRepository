@@ -81,7 +81,10 @@ void main ( void ) {
                                         count = strInStrCount(p_b, "17р");
                                         rPCount.half += count;
                                         count = strInStrCount(p_b, "бесплатно");
+                                        rPCount.noCash += count;
                                         count = strInStrCount(p_b, "б/н");
+                                        rPCount.noCash += count;
+                                        count = strInStrCount(p_b, "безнал");
                                         rPCount.noCash += count;
                                 }
                                 go = no;
