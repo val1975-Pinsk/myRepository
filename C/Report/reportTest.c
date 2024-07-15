@@ -6,12 +6,16 @@ struct message messg = { ERR, SUCS };
 struct reportPass rPCount = {.half = 0, .discount = 0, .full = 0, .noCash = 0};
 
 char * fileName = "Водители.html";
-char buffer [ 256 ];
+char buffer [ buffSize ];
+char list [5][ buffSize ];                                              //      Список оплативших по безналу.
+//int listPos = 0;                                                       //      Позиция строки в списке list.
 char * p_b;
-char * colspan_5 = "colspan=\"5\"";
-char * selected = "selected=\"selected\"";
-char * width_25 = "width=\"25px\"";
-char * endOfReport = "tr height=\"40px\"";
+char * p_l = list[0];
+char * colspan_5 = "colspan=\"5\"";                                     //      Паттерны.
+char * colspan_3 = "colspan=\"3\"";                                     //
+char * selected = "selected=\"selected\"";                              //
+char * width_25 = "width=\"25px\"";                                     //
+char * endOfReport = "tr height=\"40px\"";                              //
 int go = no;
 int count = 0;
 int total;
@@ -63,6 +67,9 @@ void main ( void ) {
                                 continue;
                                 
                         }
+                        if(strInStr(p_b, colspan_3)){
+                                addStr(p_b, p_l, CloseTag, OpenTag);
+                        }
                         if(strInStr(p_b, selected) && strInStr(p_b, "Поехал")){
                                 go = yes;
                                 continue;
@@ -86,6 +93,9 @@ void main ( void ) {
                                         rPCount.noCash += count;
                                         count = strInStrCount(p_b, "безнал");
                                         rPCount.noCash += count;
+                                        if(count != 0){
+                                                *(p_l += buffSize);
+                                        }
                                 }
                                 go = no;
                                 continue;
@@ -96,6 +106,10 @@ void main ( void ) {
                                 rPCount.full = total - (rPCount.half + rPCount.discount + rPCount.noCash);
                                 printf("%d человек за 35р, сумма %d рублей\n", rPCount.full, rPCount.full * 35);
                                 printf("%d человек по б/н или без оплаты\n", rPCount.noCash);
+                                if(rPCount.noCash != 0){
+                                        p_l = list[0];
+                                        printf("\t%s", p_l);              
+                                }
                                 printf("\n\tИтого: %d рублей.\n", rPCount.half * 17 + rPCount.discount * 30 + rPCount.full * 35);
                                 rPCount.full = 0;
                                 rPCount.discount = 0;

@@ -3,6 +3,7 @@
 
 #define     yes         1       //  да - 1
 #define     no          0       //  нет - 0
+#define     buffSize    256
 
 #define     ERR         "ошибка\n"
 #define     SUCS        "успешно\n"
@@ -46,3 +47,5 @@ extern int charToDigit(char *p);
 /*      Функция подсчитывает количество вхождений подстроки pattern в строку.
 Функция возвращает количество вхождений.*/
 extern int strInStrCount(char * str, char * pattern);
+/**/
+extern void addStr(char * p_b, char * target, char start, char end);

@@ -54,6 +54,16 @@ void printStr (char *p_b, int size){
                 p_b ++;
         }
 }
+/**/
+void addStr(char * p_b, char * target, char start, char end){
+        p_b = movePointerToChar(p_b, start, 0);
+        while(1){
+                if(*p_b == end) return;
+                *target = *p_b;
+                *(target++);
+                *(p_b++);
+        }
+}
 /*
         Функция ищет подстроку pattern в искомой строке str. Если находит возращает 1, иначе 0.
 */
@@ -82,7 +92,7 @@ int strInStr(char * str, char * pattern){
 
         указатель на следующий за указанным символом.
 */
-char* movePointerToChar(char * p_b, char chr, int display){
+char * movePointerToChar(char * p_b, char chr, int display){
         while(1){
                 if(*p_b == chr){
                         *(p_b++); 
