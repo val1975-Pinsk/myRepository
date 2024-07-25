@@ -54,16 +54,6 @@ void printStr (char *p_b, int size){
                 p_b ++;
         }
 }
-/**/
-void addStr(char * p_b, char * target, char start, char end){
-        p_b = movePointerToChar(p_b, start, 0);
-        while(1){
-                if(*p_b == end) return;
-                *target = *p_b;
-                *(target++);
-                *(p_b++);
-        }
-}
 /*
         Функция ищет подстроку pattern в искомой строке str. Если находит возращает 1, иначе 0.
 */
@@ -71,12 +61,14 @@ int strInStr(char * str, char * pattern){
         char * ptn = pattern;
         while(*str != '\0'){
                 if(*str == *ptn){
-                        *(ptn++);
+                        //*(ptn++);
+                        ptn = ptn + 1;
                         if(*ptn == '\0'){
                                 return 1;
                         }
                 }else ptn = pattern;
-                *(str++);
+                //*(str++);
+                str = str + 1;
         }
         return 0;
 }
@@ -95,11 +87,13 @@ int strInStr(char * str, char * pattern){
 char * movePointerToChar(char * p_b, char chr, int display){
         while(1){
                 if(*p_b == chr){
-                        *(p_b++); 
+                        //*(p_b++);
+                        p_b = p_b + 1;
                         return p_b;
                 }
                 if(display) printf("%c", *p_b);
-                *(p_b++);
+                //*(p_b++);
+                p_b = p_b + 1;
         }
 }
 /**/
@@ -140,13 +134,15 @@ int strInStrCount(char * str, char * pattern){
         int count = 0;
         while(*str != '\0'){
                 if(*str == *ptn){
-                        *(ptn++);
+                        //*(ptn++);
+                        ptn += 1;
                         if(*ptn == '\0'){
                                 count++;
                                 ptn = pattern;
                         }
                 }else ptn = pattern;
-                *(str++);
+                //*(str++);
+                str += 1;
         }
         return count;
 }
