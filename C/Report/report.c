@@ -16,7 +16,7 @@ int go = no;
 int count = 0;
 int total;
 
-void main ( void ) {
+int main () {
         printf ( "Открытие файла:\n");
         printf ( "%s\n", fileName ) ;
         FILE * p_f = fopen ( fileName, "r" );                           //      Открываем файл.
@@ -45,14 +45,16 @@ void main ( void ) {
                                 total = charToDigit(p_b);               //      Конвертируем количество занятых 
                                 if(total != -1){                        //мест в числовое выражение.
                                         count = total;                  //
-                                        *(p_b++);                       //
+                                        //*(p_b++);                       //warning: value computed is not used
                                 }                                       //
+                                p_b += 1;
                                 total = charToDigit(p_b);               //
                                 if(total != -1){                        //
                                         count = count * 10 + total;     //
-                                        *(p_b++);                       //
+                                        //*(p_b++);                       //
                                 }                                       //
-                                total = count;                          //
+                                total = count;
+                                p_b += 1; 
                                 p_b = movePointerToChar(p_b, ',', 1);
                                 printf(",");
                                 p_b = movePointerToChar(p_b, ',', 1);
