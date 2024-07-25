@@ -62,13 +62,13 @@ int strInStr(char * str, char * pattern){
         while(*str != '\0'){
                 if(*str == *ptn){
                         //*(ptn++);
-                        ptn = ptn + 1;
+                        ptn += 1;
                         if(*ptn == '\0'){
                                 return 1;
                         }
                 }else ptn = pattern;
                 //*(str++);
-                str = str + 1;
+                str += 1;
         }
         return 0;
 }
@@ -88,12 +88,12 @@ char * movePointerToChar(char * p_b, char chr, int display){
         while(1){
                 if(*p_b == chr){
                         //*(p_b++);
-                        p_b = p_b + 1;
+                        p_b += 1;
                         return p_b;
                 }
                 if(display) printf("%c", *p_b);
                 //*(p_b++);
-                p_b = p_b + 1;
+                p_b += 1;
         }
 }
 /**/
