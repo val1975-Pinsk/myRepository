@@ -6,15 +6,17 @@ struct message messg = { ERR, SUCS };
 struct reportPass rPCount = {.half = 0, .discount = 0, .full = 0, .noCash = 0};
 
 char * fileName = "Водители.html";
-char buffer [ 256 ];
+char buffer [ buffSize ];
 char * p_b;
 char * colspan_5 = "colspan=\"5\"";
 char * selected = "selected=\"selected\"";
 char * width_25 = "width=\"25px\"";
 char * endOfReport = "tr height=\"40px\"";
+char * bgColorWhite = "bgcolor=\"white\""; // bgcolor="white"
+int prevColorWhite = no;
 int go = no;
-int count = 0;
 int total;
+int count = 0;
 
 int main () {
         printf ( "Открытие файла:\n");
@@ -25,7 +27,7 @@ int main () {
         } else {
                 printf ( "%s", messg.sucs );
                 
-                while ((fgets(buffer, 256, p_f)) != NULL){
+                while ((fgets(buffer, buffSize, p_f)) != NULL){
                         p_b = buffer;
                         if(strInStr(p_b, "Пинск")){                     //      Здесь ищем строку с названием маршрута.
                                 printf("==================================================\n");
@@ -65,31 +67,33 @@ int main () {
                                 continue;
                                 
                         }
-                        if(strInStr(p_b, selected) && strInStr(p_b, "Поехал")){
-                                go = yes;
+                        if(strInStr(p_b, bgColorWhite)){
+                                prevColorWhite = yes;
                                 continue;
                         }
-                        if(strInStr(p_b, colspan_5) && strInStr(p_b, "+")){
+                        if(strInStr(p_b, colspan_5) && prevColorWhite == yes){
+                        /*
+                                bug_0
+                          ====================================================
+                          Здесь может быть косяк. Не всегда ставят плюсик!!!
+                          if(strInStr(p_b, colspan_5) && strInStr(p_b, "+")){}
+                        */
                                 p_b = buffer;
-                                if(go == yes){
-                                        count = strInStrCount(p_b, "Д.К.");
-                                        rPCount.discount += count;
-                                        count = strInStrCount(p_b, "Дк");
-                                        rPCount.discount += count;
-                                        count = strInStrCount(p_b, "д.к.");
-                                        rPCount.discount += count;
-                                        count = strInStrCount(p_b, "дк");
-                                        rPCount.discount += count;
-                                        count = strInStrCount(p_b, "17р");
-                                        rPCount.half += count;
-                                        count = strInStrCount(p_b, "бесплатно");
-                                        rPCount.noCash += count;
-                                        count = strInStrCount(p_b, "б/н");
-                                        rPCount.noCash += count;
-                                        count = strInStrCount(p_b, "безнал");
-                                        rPCount.noCash += count;
-                                }
+                                prevColorWhite = no;
                                 go = no;
+				rPCount.discount += getDiscountCount(p_b);
+				count = strInStrCount(p_b, "17р");
+                                rPCount.half += count;
+                                count = strInStr(p_b, "бесплатно");
+                                rPCount.noCash += count;
+                                count = strInStr(p_b, "б/н");
+                                rPCount.noCash += count;
+                                count = strInStr(p_b, "безнал");
+                                rPCount.noCash += count;
+                                count = strInStr(p_b, "безнл");
+                                rPCount.noCash += count;
+                                count = strInStr(p_b, "оплачено");
+                                rPCount.noCash += count;
                                 continue;
                         }
                         if(strInStr(p_b, endOfReport)){                 //      Подводим итоги.
