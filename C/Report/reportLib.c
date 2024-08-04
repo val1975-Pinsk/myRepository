@@ -146,5 +146,12 @@ int strInStrCount(char * str, char * pattern){
         }
         return count;
 }
-
-
+/**/
+int getDiscountCount(char * srcStr){
+        int count = 0;
+        count = strInStrCount(srcStr, "Д.К.");
+        count += strInStrCount(srcStr, "Дк");
+        count += strInStrCount(srcStr, "д.к."); 
+        count += strInStrCount(srcStr, "дк");
+	return count;
+}
