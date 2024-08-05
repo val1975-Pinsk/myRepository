@@ -155,3 +155,13 @@ int getDiscountCount(char * srcStr){
         count += strInStrCount(srcStr, "дк");
 	return count;
 }
+/**/
+int getNoCashCount(char * srcStr){
+        int count = 0;
+        count = strInStr(srcStr, "бесплатно");
+        count += strInStr(srcStr, "б/н");
+        count += strInStr(srcStr, "безнал");
+        count += strInStr(srcStr, "безнл");
+        count += strInStr(srcStr, "оплачено");
+        return count;
+}
