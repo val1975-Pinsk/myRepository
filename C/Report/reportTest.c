@@ -81,17 +81,10 @@ int main () {
                                 p_b = buffer;
                                 prevColorWhite = no;
                                 go = no;
-                                count = strInStrCount(p_b, "Д.К.");
-                                rPCount.discount += count;
-                                count = strInStrCount(p_b, "Дк");
-                                rPCount.discount += count;
-                                count = strInStrCount(p_b, "д.к.");
-                                rPCount.discount += count;
-                                count = strInStrCount(p_b, "дк");
-                                rPCount.discount += count;
-                                count = strInStrCount(p_b, "17р");
+				rPCount.discount += getDiscountCount(p_b);
+				count = strInStrCount(p_b, "17р");
                                 rPCount.half += count;
-                                count = strInStr(p_b, "бесплатно");
+                                /*count = strInStr(p_b, "бесплатно");
                                 rPCount.noCash += count;
                                 count = strInStr(p_b, "б/н");
                                 rPCount.noCash += count;
@@ -99,7 +92,11 @@ int main () {
                                 rPCount.noCash += count;
                                 count = strInStr(p_b, "безнл");
                                 rPCount.noCash += count;
+                                count = strInStr(p_b, "оплачено");
+                                rPCount.noCash += count;*/
+				rPCount.noCash += getNoCashCount(p_b);
                                 continue;
+                        }
                         }
                         if(strInStr(p_b, endOfReport)){                 //      Подводим итоги.
                                 printf("%d человек за 17р, сумма %d рублей\n", rPCount.half, rPCount.half * 17);
