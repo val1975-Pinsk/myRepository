@@ -84,17 +84,7 @@ int main () {
 				rPCount.discount += getDiscountCount(p_b);
 				count = strInStrCount(p_b, "17р");
                                 rPCount.half += count;
-                                /*count = strInStr(p_b, "бесплатно");
-                                rPCount.noCash += count;
-                                count = strInStr(p_b, "б/н");
-                                rPCount.noCash += count;
-                                count = strInStr(p_b, "безнал");
-                                rPCount.noCash += count;
-                                count = strInStr(p_b, "безнл");
-                                rPCount.noCash += count;
-                                count = strInStr(p_b, "оплачено");
-                                rPCount.noCash += count;*/
-				rPCount.noCash += getNoCashCount(p_b);
+                                rPCount.noCash += getNoCashCount(p_b);
                                 continue;
                         }
                         }
