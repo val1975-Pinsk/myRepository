@@ -49,3 +49,7 @@ extern int charToDigit(char *p);
 extern int strInStrCount(char * str, char * pattern);
 /**/
 extern void addStr(char * p_b, char * target, char start, char end);
+/**/
+extern int getDiscountCount(char * srcStr);
+/**/
+extern int getNoCashCount(char * srcStr);
