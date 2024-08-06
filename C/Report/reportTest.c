@@ -7,6 +7,7 @@ struct reportPass rPCount = {.half = 0, .discount = 0, .full = 0, .noCash = 0};
 
 char * fileName = "Водители.html";
 char buffer [ buffSize ];
+char noCashList[ 5 ][ buffSize ];
 char * p_b;
 char * colspan_5 = "colspan=\"5\"";
 char * selected = "selected=\"selected\"";
