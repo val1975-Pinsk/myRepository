@@ -31,41 +31,12 @@ int main () {
                 while ((fgets(buffer, buffSize, p_f)) != NULL){
                         p_b = buffer;
                         if(strInStr(p_b, "Пинск")){                     //      Здесь ищем строку с названием маршрута.
-                                printf("==================================================\n");
-                                //Перемещаем указатель к началу содержимого строки/
-                                p_b = movePointerToChar(p_b, CloseTag, 0);
-                                printf("Дата: \t\t   ");
-                                p_b = movePointerToChar(p_b, ',', 1);
-                                printf("\nВремя отправления:");
-                                p_b = movePointerToChar(p_b, ',', 1);
-                                printf("\nМаршрут: \t  ");
-                                p_b = movePointerToChar(p_b, OpenTag, 1);
-                                continue;
+			  printHeaderPart_1(p_b);
+                          continue;
                         }
                         if(strInStr(p_b, "свободно")){                  //      Здесь ищем строку с названием автомобиля.
-                                p_b = movePointerToChar(p_b, CloseTag, 0);
-                                printf("\nЗанято: \t   ");
-                                total = charToDigit(p_b);               //      Конвертируем количество занятых 
-                                if(total != -1){                        //мест в числовое выражение.
-                                        count = total;                  //
-                                        //*(p_b++);                       //warning: value computed is not used
-                                }                                       //
-                                p_b += 1;
-                                total = charToDigit(p_b);               //
-                                if(total != -1){                        //
-                                        count = count * 10 + total;     //
-                                        //*(p_b++);                       //
-                                }                                       //
-                                total = count;
-                                p_b += 1; 
-                                p_b = movePointerToChar(p_b, ',', 1);
-                                printf(",");
-                                p_b = movePointerToChar(p_b, ',', 1);
-                                printf("\nАвтомобиль: \t  ");
-                                p_b = movePointerToChar(p_b, OpenTag, 1);
-                                printf("\n");
-                                printf("__________________________________________________\n");
-                                continue;
+                          total = printHeaderPart_2(p_b);
+                          continue;
                                 
                         }
                         if(strInStr(p_b, bgColorWhite)){
