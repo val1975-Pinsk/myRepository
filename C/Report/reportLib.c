@@ -165,3 +165,41 @@ int getNoCashCount(char * srcStr){
         count += strInStr(srcStr, "оплачено");
         return count;
 }
+/**/
+void printHeaderPart_1(char * p_b){
+  printf("==================================================\n");
+  //Перемещаем указатель к началу содержимого строки/
+  p_b = movePointerToChar(p_b, CloseTag, 0);
+  printf("Дата: \t\t   ");
+  p_b = movePointerToChar(p_b, ',', 1);
+  printf("\nВремя отправления:");
+  p_b = movePointerToChar(p_b, ',', 1);
+  printf("\nМаршрут: \t  ");
+  p_b = movePointerToChar(p_b, OpenTag, 1);
+}
+/**/
+int printHeaderPart_2(char * p_b){
+  int digit, count;
+  p_b = movePointerToChar(p_b, CloseTag, 0);
+  printf("\nЗанято: \t   ");
+  digit = charToDigit(p_b);               //      Конвертируем количество занятых 
+  if(digit != -1){                        //мест в числовое выражение.
+    count = digit;                  //
+  //*(p_b++);                       //warning: value computed is not used
+  }                                       //
+  p_b += 1;
+  digit = charToDigit(p_b);               //
+  if(digit != -1){                        //
+    count = count * 10 + digit;           //
+  }                                       //
+  digit = count;
+  p_b += 1; 
+  p_b = movePointerToChar(p_b, ',', 1);
+  printf(",");
+  p_b = movePointerToChar(p_b, ',', 1);
+  printf("\nАвтомобиль: \t  ");
+  p_b = movePointerToChar(p_b, OpenTag, 1);
+  printf("\n");
+  printf("__________________________________________________\n");
+  return digit;
+}
