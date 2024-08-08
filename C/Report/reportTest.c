@@ -88,7 +88,6 @@ int main () {
                                 rPCount.noCash += getNoCashCount(p_b);
                                 continue;
                         }
-                        }
                         if(strInStr(p_b, endOfReport)){                 //      Подводим итоги.
                                 printf("%d человек за 17р, сумма %d рублей\n", rPCount.half, rPCount.half * 17);
                                 printf("%d человек за 30р, сумма %d рублей\n", rPCount.discount, rPCount.discount * 30);
