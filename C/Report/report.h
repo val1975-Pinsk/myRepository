@@ -59,7 +59,11 @@ extern int strIsName(char * srcStr);
 extern int strIsPayment(char * srcStr);
 /**/
 extern int isNoCash(char * srcStr);
-/**/
+/*
+        Функция записывает имя пассажира в структуру passData, в поле name.
+*/
 void writePassName(char * srcPointer, char * targetStr);
-/**/
+/*
+        Функция очищает в структуре passData поле name.
+*/
 void clearPassengerName(char * passName, int sizeOfArr);
