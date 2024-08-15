@@ -9,15 +9,15 @@
 #define     SUCS        "успешно\n"
 
 struct message {
-      char * err;
-      char * sucs;
+        char * err;
+        char * sucs;
 } ;
 
 struct reportPass {
-      int half;                                                       //      Количество пассажиров оплативших 17 рублей.
-      int discount;                                                   //      Количество пассажиров оплативших 30 рублей.
-      int full;                                                       //      Количество пассажиров оплативших 35 рублей.
-      int noCash;                                                     //      Количество пассажиров по безналу.
+        int half;                                                       //      Количество пассажиров оплативших 17 рублей.
+        int discount;                                                   //      Количество пассажиров оплативших 30 рублей.
+        int full;                                                       //      Количество пассажиров оплативших 35 рублей.
+        int noCash;                                                     //      Количество пассажиров по безналу.
 };
 /*
         Функция передвигает указатель до указанного символа chr.
@@ -54,6 +54,12 @@ extern int getDiscountCount(char * srcStr);
 /**/
 extern int getNoCashCount(char * srcStr);
 /**/
-extern void printHeaderPart_1(char * p_b);
+extern int strIsName(char * srcStr);
 /**/
-extern int printHeaderPart_2(char * p_b);
+extern int strIsPayment(char * srcStr);
+/**/
+extern int isNoCash(char * srcStr);
+/**/
+void writePassName(char * srcPointer, char * targetStr);
+/**/
+void clearPassengerName(char * passName, int sizeOfArr);
