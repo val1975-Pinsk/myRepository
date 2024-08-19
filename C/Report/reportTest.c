@@ -43,7 +43,8 @@ int main () {
                                 prevColorWhite = yes;
                                 continue;
                         }
-                        if(strInStr(p_b, colspan_5) && prevColorWhite == yes){
+			// if(strInStr(p_b, colspan_5) && prevColorWhite == yes){
+			if(strIsPayment(p_b) && prevColorWhite == yes){
                         /*
                                 bug_0
                           ====================================================
