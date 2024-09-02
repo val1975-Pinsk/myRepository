@@ -2,218 +2,90 @@
 #include <string.h>
 #include "report.h"
 
-struct message messg = { ERR, SUCS };
-struct reportPass rPCount = {.half = 0, .discount = 0, .full = 0, .noCash = 0};
-
+char strBuff[ 256 ];
+char listPass [ 600 ];                 // Список пассажиров оплативших проезд по безналу
+int i = 0;                             // Порядковый номер строки в массиве listPass
+char * p_lP = listPass;                // Указатель на начало списка пассажиров
+char * p_b;                            // Указатель на strBuff
 char * fileName = "Водители.html";
-char buffer [ buffSize ];
-char * p_b;
-char * colspan_5 = "colspan=\"5\"";
-char * selected = "selected=\"selected\"";
-char * width_25 = "width=\"25px\"";
-char * endOfReport = "tr height=\"40px\"";
-char * bgColorWhite = "bgcolor=\"white\""; // bgcolor="white"
-int prevColorWhite = no;
-int go = no;
-int total;
-int count = 0;
 
-int main () {
-        printf ( "Открытие файла:\n");
-        printf ( "%s\n", fileName ) ;
-        FILE * p_f = fopen ( fileName, "r" );                           //      Открываем файл.
-        if ( p_f == NULL ) {
-                printf ( "%s", messg.err );
-        } else {
-                printf ( "%s", messg.sucs );
-                
-                while ((fgets(buffer, buffSize, p_f)) != NULL){
-                        p_b = buffer;
-                        if(strInStr(p_b, "Пинск")){                     //      Здесь ищем строку с названием маршрута.
-                                printf("==================================================\n");
-                                //Перемещаем указатель к началу содержимого строки/
-                                p_b = movePointerToChar(p_b, CloseTag, 0);
-                                printf("Дата: \t\t   ");
-                                p_b = movePointerToChar(p_b, ',', 1);
-                                printf("\nВремя отправления:");
-                                p_b = movePointerToChar(p_b, ',', 1);
-                                printf("\nМаршрут: \t  ");
-                                p_b = movePointerToChar(p_b, OpenTag, 1);
-                                continue;
-                        }
-                        if(strInStr(p_b, "свободно")){                  //      Здесь ищем строку с названием автомобиля.
-                                p_b = movePointerToChar(p_b, CloseTag, 0);
-                                printf("\nЗанято: \t   ");
-                                total = charToDigit(p_b);               //      Конвертируем количество занятых 
-                                if(total != -1){                        //мест в числовое выражение.
-                                        count = total;                  //
-                                        //*(p_b++);                       //warning: value computed is not used
-                                }                                       //
-                                p_b += 1;
-                                total = charToDigit(p_b);               //
-                                if(total != -1){                        //
-                                        count = count * 10 + total;     //
-                                        //*(p_b++);                       //
-                                }                                       //
-                                total = count;
-                                p_b += 1; 
-                                p_b = movePointerToChar(p_b, ',', 1);
-                                printf(",");
-                                p_b = movePointerToChar(p_b, ',', 1);
-                                printf("\nАвтомобиль: \t  ");
-                                p_b = movePointerToChar(p_b, OpenTag, 1);
-                                printf("\n");
-                                printf("__________________________________________________\n");
-                                continue;
-                                
-                        }
-                        if(strInStr(p_b, bgColorWhite)){
-                                prevColorWhite = yes;
-                                continue;
-                        }
-                        if(strInStr(p_b, colspan_5) && prevColorWhite == yes){
-                        /*
-                                bug_0
-                          ====================================================
-                          Здесь может быть косяк. Не всегда ставят плюсик!!!
-                          if(strInStr(p_b, colspan_5) && strInStr(p_b, "+")){}
-                        */
-                                p_b = buffer;
-                                prevColorWhite = no;
-                                go = no;
-				rPCount.discount += getDiscountCount(p_b);
-				count = strInStrCount(p_b, "17р");
-                                rPCount.half += count;
-                                count = strInStr(p_b, "бесплатно");
-                                rPCount.noCash += count;
-                                count = strInStr(p_b, "б/н");
-                                rPCount.noCash += count;
-                                count = strInStr(p_b, "безнал");
-                                rPCount.noCash += count;
-                                count = strInStr(p_b, "безнл");
-                                rPCount.noCash += count;
-                                count = strInStr(p_b, "оплачено");
-                                rPCount.noCash += count;
-                                continue;
-                        }
-                        if(strInStr(p_b, endOfReport)){                 //      Подводим итоги.
-                                printf("%d человек за 17р, сумма %d рублей\n", rPCount.half, rPCount.half * 17);
-                                printf("%d человек за 30р, сумма %d рублей\n", rPCount.discount, rPCount.discount * 30);
-                                rPCount.full = total - (rPCount.half + rPCount.discount + rPCount.noCash);
-                                printf("%d человек за 35р, сумма %d рублей\n", rPCount.full, rPCount.full * 35);
-                                printf("%d человек по б/н или без оплаты\n", rPCount.noCash);
-                                printf("\n\tИтого: %d рублей.\n", rPCount.half * 17 + rPCount.discount * 30 + rPCount.full * 35);
-                                rPCount.full = 0;
-                                rPCount.discount = 0;
-                                rPCount.noCash = 0;
-                                rPCount.half = 0;
-                        }
-                }
-        }
-}
-#include <stdio.h>
-#include <string.h>
-#include "report.h"
+struct{
+		char name [ 120 ];
+		char status [ 20 ];
+		char numberOfSeats [ 2 ];
+		char payment [ 50 ];
+} passenger;
 
-struct message messg = { ERR, SUCS };
-struct reportPass rPCount = {.half = 0, .discount = 0, .full = 0, .noCash = 0};
+char * p_pN = passenger.name;
+char * p_pS = passenger.status;
+char * p_nOS = passenger.numberOfSeats;
+char * p_pmnt = passenger.payment;
+int nameSize = 120;
+int statusSize = 20;
+int numberOfSeatsSize = 2;
+int paymentSize = 50;
 
-char * fileName = "Водители.html";
-char buffer [ buffSize ];
-char noCashList[ 5 ][ buffSize ];
-char * p_b;
-char * colspan_5 = "colspan=\"5\"";
-char * selected = "selected=\"selected\"";
-char * width_25 = "width=\"25px\"";
-char * endOfReport = "tr height=\"40px\"";
-char * bgColorWhite = "bgcolor=\"white\""; // bgcolor="white"
-int prevColorWhite = no;
-int go = no;
-int count = 0;
-int total;
+int main(){
 
-int main () {
-        printf ( "Открытие файла:\n");
-        printf ( "%s\n", fileName ) ;
-        FILE * p_f = fopen ( fileName, "r" );                           //      Открываем файл.
-        if ( p_f == NULL ) {
-                printf ( "%s", messg.err );
-        } else {
-                printf ( "%s", messg.sucs );
-                
-                while ((fgets(buffer, buffSize, p_f)) != NULL){
-                        p_b = buffer;
-                        if(strInStr(p_b, "Пинск")){                     //      Здесь ищем строку с названием маршрута.
-                                printf("==================================================\n");
-                                //Перемещаем указатель к началу содержимого строки/
-                                p_b = movePointerToChar(p_b, CloseTag, 0);
-                                printf("Дата: \t\t   ");
-                                p_b = movePointerToChar(p_b, ',', 1);
-                                printf("\nВремя отправления:");
-                                p_b = movePointerToChar(p_b, ',', 1);
-                                printf("\nМаршрут: \t  ");
-                                p_b = movePointerToChar(p_b, OpenTag, 1);
-                                continue;
-                        }
-                        if(strInStr(p_b, "свободно")){                  //      Здесь ищем строку с названием автомобиля.
-                                p_b = movePointerToChar(p_b, CloseTag, 0);
-                                printf("\nЗанято: \t   ");
-                                total = charToDigit(p_b);               //      Конвертируем количество занятых 
-                                if(total != -1){                        //мест в числовое выражение.
-                                        count = total;                  //
-                                        //*(p_b++);                       //warning: value computed is not used
-                                }                                       //
-                                p_b += 1;
-                                total = charToDigit(p_b);               //
-                                if(total != -1){                        //
-                                        count = count * 10 + total;     //
-                                        //*(p_b++);                       //
-                                }                                       //
-                                total = count;
-                                p_b += 1; 
-                                p_b = movePointerToChar(p_b, ',', 1);
-                                printf(",");
-                                p_b = movePointerToChar(p_b, ',', 1);
-                                printf("\nАвтомобиль: \t  ");
-                                p_b = movePointerToChar(p_b, OpenTag, 1);
-                                printf("\n");
-                                printf("__________________________________________________\n");
-                                continue;
-                                
-                        }
-                        if(strInStr(p_b, bgColorWhite)){
-                                prevColorWhite = yes;
-                                continue;
-                        }
-                        if(strInStr(p_b, colspan_5) && prevColorWhite == yes){
-                        /*
-                                bug_0
-                          ====================================================
-                          Здесь может быть косяк. Не всегда ставят плюсик!!!
-                          if(strInStr(p_b, colspan_5) && strInStr(p_b, "+")){}
-                        */
-                                p_b = buffer;
-                                prevColorWhite = no;
-                                go = no;
-				rPCount.discount += getDiscountCount(p_b);
-				count = strInStrCount(p_b, "17р");
-                                rPCount.half += count;
-                                rPCount.noCash += getNoCashCount(p_b);
-                                continue;
-                        }
-                        }
-                        if(strInStr(p_b, endOfReport)){                 //      Подводим итоги.
-                                printf("%d человек за 17р, сумма %d рублей\n", rPCount.half, rPCount.half * 17);
-                                printf("%d человек за 30р, сумма %d рублей\n", rPCount.discount, rPCount.discount * 30);
-                                rPCount.full = total - (rPCount.half + rPCount.discount + rPCount.noCash);
-                                printf("%d человек за 35р, сумма %d рублей\n", rPCount.full, rPCount.full * 35);
-                                printf("%d человек по б/н или без оплаты\n", rPCount.noCash);
-                                printf("\n\tИтого: %d рублей.\n", rPCount.half * 17 + rPCount.discount * 30 + rPCount.full * 35);
-                                rPCount.full = 0;
-                                rPCount.discount = 0;
-                                rPCount.noCash = 0;
-                                rPCount.half = 0;
-                        }
-                }
-        }
+		
+		/****************************/
+		/* Процедура открытия файла */
+
+		printf("Opening file...");
+		printf("%s\n", fileName);
+		FILE * p_f = fopen ( fileName, "r" );
+
+		/*   Конец процедуры        */
+		/****************************/
+
+		/****************************/
+		/* Обработка ошибки открытия*/
+	  
+		if ( p_f == NULL ) {
+				printf("File open whith error! :(\n");
+		
+		/* Конец обработки ошибки   */
+		/****************************/
+		} else {
+		/* */
+				printf("File is open :)\n");
+				while ((fgets(strBuff, 256, p_f)) != NULL){
+						p_b = strBuff;
+						/**************************/
+						if(strIsName(p_b)){
+								clearString(p_pN, nameSize);
+								getContent(p_b, p_pN);
+								printf("%s", passenger.name);
+								continue;
+							}
+						/**************************/      
+						if(strIsStatus(p_b)){
+								clearString(p_pS, statusSize);
+								getContent(p_b, p_pS);
+								printf("%s", passenger.status);
+								continue;
+							}
+						/**************************/
+						if(strIsNumberOfSeats(p_b)){
+								clearString(p_nOS, numberOfSeatsSize);
+								getContent(p_b, p_nOS);
+								printf("%s", passenger.numberOfSeats);
+								continue;
+							}
+						/**************************/
+						if(strIsPayment(p_b)){
+								clearString(p_pmnt, paymentSize);
+								getContent(p_b, p_pmnt);
+								printf("%s", passenger.payment);
+								continue;
+							}
+				}
+		}
+	  //printf("%s", listPass);
+	  //  printf("%s", p_lP);
+		printf("\nЗакрываю файл\n");
+		if ( fclose (p_f) == EOF){
+				printf ("ошибка :(\n");
+		} else printf ("выполнено :)\n");
+		return 1; // Конец программы.
 }
