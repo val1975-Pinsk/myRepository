@@ -13,6 +13,10 @@ int getMonthDigit_2 () {
         scanf ( "%d", &month ) ;
         return month ;
 }
+/**/
+void printPointerAddr(char * pointer){
+  printf("%p\n", &pointer);
+}
 /*
   Функция запроса на получение месяца в числовом выражении.
 */
@@ -47,13 +51,6 @@ int isDigit ( int c ){
                 return 1;
         } else return 0;
 }
-/**/
-void printStr (char *p_b, int size){
-        for (int c = 0; c < size; c++) {
-                printf("%c", *p_b);
-                p_b ++;
-        }
-}
 /*
         Функция ищет подстроку pattern в искомой строке str. Если находит возращает 1, иначе 0.
 */
@@ -74,46 +71,75 @@ int strInStr(char * str, char * pattern){
 }
 /**/
 int strIsName(char * srcStr){
-  char * pattern = "colspan=\"3\"";
-  return strInStr(srcStr, pattern);
+		char * pattern = "colspan=\"3\"";
+		return strInStr(srcStr, pattern);
+}
+/**/
+int strIsNumberOfSeats(char * srcStr){
+		char * pattern = "width=\"25px\"";
+		return strInStr(srcStr, pattern);
+}
+/**/
+int strIsStatus(char * srcStr){
+		char * pattern = "selected=\"selected\"";
+		return strInStr(srcStr, pattern);
 }
 /**/
 int strIsPayment(char * srcStr){
-  char * pattern = "colspan=\"5\"";
-  return strInStr(srcStr, pattern);
+		char * pattern = "colspan=\"5\"";
+		if(strInStr(srcStr, pattern)){
+		if(!strInStr(srcStr, "</td>")) return no;
+		if(strInStr(srcStr, "height=\"40px\"")) return no;
+		if(strInStr(srcStr, "Минск")) return no;
+		if(strInStr(srcStr, "свободно")) return no;
+		return yes;
+  }
 }
 /*
   Функция проверяет была ли произведена оплата по безналичному расчёту.
  */
 int isNoCash(char * srcStr){
-  if (strInStr(srcStr, "безнал")){
-    return yes;
-  }else if (strInStr(srcStr, "б/н")){
-    return yes;
-  }else if (strInStr(srcStr, "безнл")){
-    return yes;
-  }else if (strInStr(srcStr, "бесплатно")){
-    return yes;
-  }else return strInStr(srcStr, "оплачено");
+		if (strInStr(srcStr, "безнал")){
+				return yes;
+		}else if (strInStr(srcStr, "б/н")){
+				return yes;
+		}else if (strInStr(srcStr, "безнл")){
+				return yes;
+		}else if (strInStr(srcStr, "бесплатно")){
+			return yes;
+		}else return strInStr(srcStr, "оплачено");
 }
 /**/
-void clearPassengerName(char * passName, int sizeOfArr){
-  memset(passName, ' ', sizeOfArr);
+void clearString(char * string, int sizeOfString){
+  memset(string, ' ', sizeOfString);
+}
+/*
+      Функция выделяет подстроку между закрывающим тэгом и открывающим.
+  srcPointer - указатель на источник(строка HTML).
+  targetPointer - указатель адресата, куда нужно записать.!
+ */
+void getContent(char * srcPointer, char * targetPointer){
+	    srcPointer = movePointerToChar(srcPointer, CloseTag, 0);
+	    *targetPointer = *srcPointer;
+	    while(1){
+				targetPointer += 1;
+				srcPointer += 1;
+				if(*srcPointer == OpenTag){
+						*targetPointer = '\n';
+				break;
+				}
+				*targetPointer = *srcPointer;
+	  }
+				targetPointer += 1;
+				*targetPointer = '\0';
 }
 /**/
-void writePassName(char * srcPointer, char * targetStr){
-  srcPointer = movePointerToChar(srcPointer, CloseTag, 0);
-  *targetStr = *srcPointer;
-  while(1){
-    targetStr += 1;
-    srcPointer += 1;
-    if(*srcPointer == OpenTag){
-      srcPointer = '\0';
-      break;
-    }
-    *targetStr = *srcPointer;
+/*void appendPassName(char * srcPointer, char * targetPointer){
+  targetPointer = movePointerToChar(targetPointer, '\0', 0);
+  targetPointer -= 1;
+  writePassName(srcPointer, targetPointer);
   }
-}
+*/
 /*
         Функция передвигает указатель до указанного символа chr.
 Принимаемые переменные:
