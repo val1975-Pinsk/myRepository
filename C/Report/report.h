@@ -5,14 +5,17 @@
 #define     no          0       //  нет - 0
 #define     buffSize    256
 
-#define     ERR         "ошибка\n"
-#define     SUCS        "успешно\n"
+#define     ERR         "Ошибка открытия... :(\n"
+#define     SUCS        "Файл открыт. :)\n"
+#define     OPENING     "Открытие файла:\n"
 
-struct message {
-        char * err;
-        char * sucs;
-} ;
-
+/*
+struct file_message_struct {
+  char * err;
+  char * sucs;
+  char * opening;
+} f_message = {ERR, SUCS, OPENING};
+*/
 struct reportPass {
         int half;                                                       //      Количество пассажиров оплативших 17 рублей.
         int discount;                                                   //      Количество пассажиров оплативших 30 рублей.
@@ -41,7 +44,7 @@ extern int getMonthDigit_2 ();
 */
 extern int isDigit (int c);
 /**/
-extern void printStr (char *p_b, int size);
+extern void printPointerAddr(char * pointer);
 /**/
 extern int charToDigit(char *p);
 /*      Функция подсчитывает количество вхождений подстроки pattern в строку.
@@ -56,14 +59,16 @@ extern int getNoCashCount(char * srcStr);
 /**/
 extern int strIsName(char * srcStr);
 /**/
+extern int strIsNumberOfSeats(char * srcStr);
+/**/
 extern int strIsPayment(char * srcStr);
 /**/
+extern int strIsStatus(char * srcStr);
+/**/
 extern int isNoCash(char * srcStr);
-/*
-        Функция записывает имя пассажира в структуру passData, в поле name.
-*/
-void writePassName(char * srcPointer, char * targetStr);
-/*
-        Функция очищает в структуре passData поле name.
-*/
-void clearPassengerName(char * passName, int sizeOfArr);
+/**/
+extern void getContent(char * srcPointer, char * targetPointer);
+/**/
+extern void appendPassName(char * srcPointer, char * targetPointer);
+/**/
+extern void clearString(char * string, int sizeOfString);
