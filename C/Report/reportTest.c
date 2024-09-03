@@ -8,22 +8,21 @@ int i = 0;                             // Порядковый номер стр
 char * p_lP = listPass;                // Указатель на начало списка пассажиров
 char * p_b;                            // Указатель на strBuff
 char * fileName = "Водители.html";
-
+char * filePassData = "passenger.txt";
 struct{
 		char name [ 120 ];
 		char status [ 20 ];
-		char numberOfSeats [ 2 ];
-		char payment [ 50 ];
+		char numberOfSeats [ 5 ];
+		char payment [ 30 ];
 } passenger;
-
 char * p_pN = passenger.name;
 char * p_pS = passenger.status;
 char * p_nOS = passenger.numberOfSeats;
 char * p_pmnt = passenger.payment;
-int nameSize = 120;
-int statusSize = 20;
-int numberOfSeatsSize = 2;
-int paymentSize = 50;
+int nameSize = sizeof(passenger.name);
+int statusSize = sizeof(passenger.status);
+int numberOfSeatsSize = sizeof(passenger.numberOfSeats);
+int paymentSize = sizeof(passenger.payment);
 
 int main(){
 
@@ -34,7 +33,8 @@ int main(){
 		printf("Opening file...");
 		printf("%s\n", fileName);
 		FILE * p_f = fopen ( fileName, "r" );
-
+		FILE * p_fPassDat = fopen ( filePassData, "a");
+		
 		/*   Конец процедуры        */
 		/****************************/
 
@@ -55,37 +55,36 @@ int main(){
 						if(strIsName(p_b)){
 								clearString(p_pN, nameSize);
 								getContent(p_b, p_pN);
-								printf("%s", passenger.name);
 								continue;
 							}
 						/**************************/      
 						if(strIsStatus(p_b)){
 								clearString(p_pS, statusSize);
 								getContent(p_b, p_pS);
-								printf("%s", passenger.status);
 								continue;
 							}
 						/**************************/
 						if(strIsNumberOfSeats(p_b)){
 								clearString(p_nOS, numberOfSeatsSize);
 								getContent(p_b, p_nOS);
-								printf("%s", passenger.numberOfSeats);
 								continue;
 							}
 						/**************************/
 						if(strIsPayment(p_b)){
 								clearString(p_pmnt, paymentSize);
 								getContent(p_b, p_pmnt);
-								printf("%s", passenger.payment);
+								fputs(passenger.name, p_fPassDat);
+								fputs(passenger.status, p_fPassDat);
+								fputs(passenger.numberOfSeats, p_fPassDat);
+								fputs(passenger.payment, p_fPassDat);
 								continue;
 							}
 				}
 		}
-	  //printf("%s", listPass);
-	  //  printf("%s", p_lP);
 		printf("\nЗакрываю файл\n");
 		if ( fclose (p_f) == EOF){
 				printf ("ошибка :(\n");
 		} else printf ("выполнено :)\n");
+		fclose (p_fPassDat);
 		return 1; // Конец программы.
 }
