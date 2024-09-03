@@ -216,13 +216,13 @@ int strInStrCount(char * str, char * pattern){
 }
 /**/
 int getDiscountCount(char * srcStr){
-        int count = 0;
-        count = strInStrCount(srcStr, "Д.К.");
-        count += strInStrCount(srcStr, "Дк");
-        count += strInStrCount(srcStr, "д.к."); 
-        count += strInStrCount(srcStr, "дк");
+    int count = 0;
+    count = strInStrCount(srcStr, "Д.К.");
+    count += strInStrCount(srcStr, "Дк");
+    count += strInStrCount(srcStr, "д.к."); 
+    count += strInStrCount(srcStr, "дк");
 	return count;
-}
+	}
 /**/
 int getNoCashCount(char * srcStr){
         int count = 0;
@@ -232,4 +232,4 @@ int getNoCashCount(char * srcStr){
         count += strInStr(srcStr, "безнл");
         count += strInStr(srcStr, "оплачено");
         return count;
-}
+	}
