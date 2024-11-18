@@ -22,6 +22,11 @@ struct reportPass {
         int full;                                                       //      Количество пассажиров оплативших 35 рублей.
         int noCash;                                                     //      Количество пассажиров по безналу.
 };
+struct payValue {
+		int half;														//		
+		int discount;													//		
+		int full;														//		
+	};
 /*
         Функция передвигает указатель до указанного символа chr.
 Возвращаемое значение указатель на следующий за указанным символом.
@@ -72,3 +77,5 @@ extern void getContent(char * srcPointer, char * targetPointer);
 extern void appendPassName(char * srcPointer, char * targetPointer);
 /**/
 extern void clearString(char * string, int sizeOfString);
+/**/
+extern int numberOfSeatsToDigit(char * numberOfSeats);
