@@ -88,12 +88,12 @@ int strIsStatus(char * srcStr){
 int strIsPayment(char * srcStr){
 		char * pattern = "colspan=\"5\"";
 		if(strInStr(srcStr, pattern)){
-		if(!strInStr(srcStr, "</td>")) return no;
-		if(strInStr(srcStr, "height=\"40px\"")) return no;
-		if(strInStr(srcStr, "Минск")) return no;
-		if(strInStr(srcStr, "свободно")) return no;
-		return yes;
-  }
+			if(!strInStr(srcStr, "</td>")) return no;
+			if(strInStr(srcStr, "height=\"40px\"")) return no;
+			if(strInStr(srcStr, "Минск")) return no;
+			if(strInStr(srcStr, "свободно")) return no;
+			return yes;
+		}
 }
 /*
   Функция проверяет была ли произведена оплата по безналичному расчёту.
@@ -116,7 +116,7 @@ void clearString(char * string, int sizeOfString){
 /*
       Функция выделяет подстроку между закрывающим тэгом и открывающим.
   srcPointer - указатель на источник(строка HTML).
-  targetPointer - указатель адресата, куда нужно записать.!
+  targetPointer - указатель адресата, куда нужно записать!
  */
 void getContent(char * srcPointer, char * targetPointer){
 	    srcPointer = movePointerToChar(srcPointer, CloseTag, 0);
@@ -165,8 +165,22 @@ char * movePointerToChar(char * p_b, char chr, int display){
         }
 }
 /**/
+int numberOfSeatsToDigit(char * numberOfSeats){
+		int digit, result;
+		digit = charToDigit(numberOfSeats);
+		if(digit != -1){
+				result = digit;
+			}
+		result = digit;
+		digit = charToDigit(numberOfSeats);
+		if(digit != -1){
+				result = result * 10 + digit;
+			}
+		return result;
+	}
+/**/
 int charToDigit(char *p){
-        printf("%c", *p);
+        //printf("%c", *p);
         switch(*p){
                 case '1':
                         return 1;
