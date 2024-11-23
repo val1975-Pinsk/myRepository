@@ -16,16 +16,21 @@ struct file_message_struct {
   char * opening;
 } f_message = {ERR, SUCS, OPENING};
 */
-struct reportPass {
+struct PayReport {
         int half;                                                       //      Количество пассажиров оплативших 17 рублей.
         int discount;                                                   //      Количество пассажиров оплативших 30 рублей.
         int full;                                                       //      Количество пассажиров оплативших 35 рублей.
         int noCash;                                                     //      Количество пассажиров по безналу.
-};
-struct payValue {
+	};
+struct PayValue {
 		int half;														//		
 		int discount;													//		
 		int full;														//		
+	};
+struct Total {
+		int half;
+		int discount;
+		int full;
 	};
 /*
         Функция передвигает указатель до указанного символа chr.
@@ -79,3 +84,5 @@ extern void appendPassName(char * srcPointer, char * targetPointer);
 extern void clearString(char * string, int sizeOfString);
 /**/
 extern int numberOfSeatsToDigit(char * numberOfSeats);
+/**/
+extern int isEndOfReport(char * srcStr);
