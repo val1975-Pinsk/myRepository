@@ -110,6 +110,10 @@ int isNoCash(char * srcStr){
 		}else return strInStr(srcStr, "оплачено");
 }
 /**/
+int isEndOfReport(char * srcStr){
+		return strInStr(srcStr, "tr height=\"40px\"");
+	}
+/**/
 void clearString(char * string, int sizeOfString){
   memset(string, ' ', sizeOfString);
 }
