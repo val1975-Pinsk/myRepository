@@ -10,17 +10,18 @@ char * fileName = "Водители.html";
 struct{
 		char name [ 120 ];
 		char status [ 20 ];
-		char numberOfSeats [ 2 ];
 		char payment [ 30 ];
 } passenger;
 char * p_pN = passenger.name;
 char * p_pS = passenger.status;
-char * p_nOS = passenger.numberOfSeats;
 char * p_pmnt = passenger.payment;
-struct payValue payVal = {.half = 19, .discount = 35, .full = 37};
+
+struct PayValue payVal = {.half = 19, .discount = 35, .full = 37};
+struct PayReport payRep = {.half = 0, .discount = 0, .full = 0, .noCash = 0};
+struct Total total = {.half = 0, .discount = 0, .full = 0};
+
 int nameSize = sizeof(passenger.name);
 int statusSize = sizeof(passenger.status);
-int numberOfSeatsSize = sizeof(passenger.numberOfSeats);
 int paymentSize = sizeof(passenger.payment);
 
 int main(){
@@ -50,6 +51,7 @@ int main(){
 				printf("File is open :)\n");
 				while ((fgets(strBuff, 256, p_f)) != NULL){
 						p_b = strBuff;
+						
 						if(strInStr(p_b, "Пинск")){                     //      Здесь ищем строку с названием маршрута.
                                 printf("==================================================\n");
                                 //Перемещаем указатель к началу содержимого строки/
@@ -60,15 +62,21 @@ int main(){
                                 p_b = movePointerToChar(p_b, ',', 1);
                                 printf("\nМаршрут: \t  ");
                                 p_b = movePointerToChar(p_b, OpenTag, 1);
-                                printf("\n");
                                 continue;
                         }
                         if(strInStr(p_b, "свободно")){                  //      Здесь ищем строку с названием автомобиля.
                                 p_b = movePointerToChar(p_b, CloseTag, 0);
                                 printf("\nЗанято: \t   ");
-                                p_b = movePointerToChar(p_b, ',', 1);
-                                printf(",");
-                                p_b = movePointerToChar(p_b, ',', 1);
+                                digit = charToDigit(p_b);
+                                if(digit != -1) payRep.full = digit;
+                                p_b += 1;
+                                digit = charToDigit(p_b);
+                                if(digit != -1){
+										payRep.full = payRep.full * 10 + digit;
+									}
+                                printf("%d", payRep.full);
+                                p_b = movePointerToChar(p_b, ',', 0);
+                                p_b = movePointerToChar(p_b, ',', 0);
                                 printf("\nАвтомобиль: \t  ");
                                 p_b = movePointerToChar(p_b, OpenTag, 1);
                                 printf("\n");
@@ -80,32 +88,45 @@ int main(){
 						if(strIsName(p_b)){
 								clearString(p_pN, nameSize);
 								getContent(p_b, p_pN);
-								printf("%s", passenger.name);
 								continue;
 							}
 						/**************************/      
 						if(strIsStatus(p_b)){
 								clearString(p_pS, statusSize);
 								getContent(p_b, p_pS);
-								printf("%s", passenger.status);
 								continue;
 							}
 						/**************************/
-						if(strIsNumberOfSeats(p_b)){
+						/*if(strIsNumberOfSeats(p_b)){
 								clearString(p_nOS, numberOfSeatsSize);
 								getContent(p_b, p_nOS);
 								printf("%s", passenger.numberOfSeats);
 								continue;
-							}
+							}*/
 						/**************************/
 						if(strIsPayment(p_b)){
 								clearString(p_pmnt, paymentSize);
 								getContent(p_b, p_pmnt);
-								/*fputs(passenger.name, p_fPassDat);
-								fputs(passenger.status, p_fPassDat);
-								fputs(passenger.numberOfSeats, p_fPassDat);
-								fputs(passenger.payment, p_fPassDat);*/
-								printf("%s", passenger.payment);
+								if(strInStr(passenger.status, "Поехал")){
+										payRep.discount = payRep.discount + getDiscountCount(passenger.payment);
+										payRep.noCash = payRep.noCash + getNoCashCount(passenger.payment);
+									}
+							}
+						/**************************/
+						if(isEndOfReport(p_b)){
+								if(payRep.full != 0){
+										payRep.full = payRep.full - payRep.discount - payRep.noCash;
+										total.discount = payRep.discount * payVal.discount;
+										total.full = payRep.full * payVal.full;
+										printf("По безналу      \t%d\n", payRep.noCash);
+										printf("По дисконту     \t%d\t%d\n", payRep.discount, total.discount);
+										printf("Полная стоимость\t%d\t%d\n", payRep.full, total.full);
+										printf("Итого           \t\t%d\n", total.discount + total.full);
+										payRep.half = 0;
+										payRep.discount = 0;
+										payRep.full = 0;
+										payRep.noCash = 0;
+									}
 							}
 				}
 		}
