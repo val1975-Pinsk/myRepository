@@ -1,214 +1,85 @@
 # include <stdio.h>
 # include <string.h>
+# include <stlib.h>
 # include "report.h"
 
 
-enum month {Январь = 1, Февраль, Март, Апрель, Май, Июнь, Июль, Август, Сентябрь, Октябрь, Ноябрь, Декабрь} ;
-/*
-  Функция запроса на получение месяца в числовом выражении версия 2.
-*/
-int getMonthDigit_2 () {
-        int month ;
-        printf ( "Введите порядковый номер месяца: " ) ;
-        scanf ( "%d", &month ) ;
-        return month ;
-}
 /**/
-void printPointerAddr(char * pointer){
-  printf("%p\n", &pointer);
-}
-/*
-  Функция запроса на получение месяца в числовом выражении.
-*/
-int getMonthDigit () {
-        int c, month ;
-        month = 0 ;
-        while ( 1 ) {
-                c = getchar () ;
-                if ( c == 10 ) {
-                        if ( month == 0 ) {
-                                printf ( "Ноль недопустимое значение!\n" ) ; 
-                        } else if ( month > 12 ) {
-                                printf ( "Недопустимое значение, больше 12!\n" ) ;
-                                month = 0 ;
-                        } else return month ;
-                }
-                if ( isDigit ( c ) ){
-                        if ( month != 0 ){
-                                month = month * 10 + ( c - 48 ) ;
-                        } else {
-                                month = c - 48 ;
-                        }
-                }
-        }
-}
-/*
-        Проверка символа на число.
-        Функция возвращает 1 - если символ число, иначе возвращается 0.
-*/
-int isDigit ( int c ){
-        if ( c >= '0' && c <= '9'){
-                return 1;
-        } else return 0;
-}
-/*
-        Функция ищет подстроку pattern в искомой строке str. Если находит возращает 1, иначе 0.
-*/
-int strInStr(char * str, char * pattern){
-        char * ptn = pattern;
-        while(*str != '\0'){
-                if(*str == *ptn){
-                        //*(ptn++);
-                        ptn += 1;
-                        if(*ptn == '\0'){
-                                return yes;
-                        }
-                }else ptn = pattern;
-                //*(str++);
-                str += 1;
-        }
-        return no;
-}
-/**/
-int strIsName(char * srcStr){
-		char * pattern = "colspan=\"3\"";
-		return strInStr(srcStr, pattern);
-}
-/**/
-int strIsNumberOfSeats(char * srcStr){
-		char * pattern = "width=\"25px\"";
-		return strInStr(srcStr, pattern);
-}
-/**/
-int strIsStatus(char * srcStr){
-		char * pattern = "selected=\"selected\"";
-		return strInStr(srcStr, pattern);
-}
-/**/
-int strIsPayment(char * srcStr){
-		char * pattern = "colspan=\"5\"";
-		if(strInStr(srcStr, pattern)){
-			if(!strInStr(srcStr, "</td>")) return no;
-			if(strInStr(srcStr, "height=\"40px\"")) return no;
-			if(strInStr(srcStr, "Минск")) return no;
-			if(strInStr(srcStr, "свободно")) return no;
-			return yes;
-		}
-}
-/*
-  Функция проверяет была ли произведена оплата по безналичному расчёту.
- */
-int isNoCash(char * srcStr){
-		if (strInStr(srcStr, "безнал")){
-				return yes;
-		}else if (strInStr(srcStr, "б/н")){
-				return yes;
-		}else if (strInStr(srcStr, "безнл")){
-				return yes;
-		}else if (strInStr(srcStr, "бесплатно")){
-			return yes;
-		}else return strInStr(srcStr, "оплачено");
-}
-/**/
-int isEndOfReport(char * srcStr){
-		return strInStr(srcStr, "tr height=\"40px\"");
+char* getMallocCharBuff(int sizeBuff){
+	printf("Выделение %d байт памяти...\n", sizeBuff);
+	char* strBuff = (char*)malloc(sizeBuff * sizeof(char));
+	if(strBuff == NULL){
+		printf("Ошибка выделения памяти!\nПрограмма будет остановлена.\n");
 	}
+	return strBuff;
+};
 /**/
-void clearString(char * string, int sizeOfString){
-  memset(string, ' ', sizeOfString);
-}
-/*
-      Функция выделяет подстроку между закрывающим тэгом и открывающим.
-  srcPointer - указатель на источник(строка HTML).
-  targetPointer - указатель адресата, куда нужно записать!
- */
-void getContent(char * srcPointer, char * targetPointer){
-	    srcPointer = movePointerToChar(srcPointer, CloseTag, 0);
-	    *targetPointer = *srcPointer;
-	    while(1){
-				targetPointer += 1;
-				srcPointer += 1;
-				if(*srcPointer == OpenTag){
-						*targetPointer = '\n';
-				break;
-				}
-				*targetPointer = *srcPointer;
-	  }
-				targetPointer += 1;
-				*targetPointer = '\0';
-}
+void printHeader(struct DirectReport* dr, struct Payment* pay){
+	//dr->done = 0;
+	printf("=============================\nДата \t\t  %s\n", dr->date);
+	printf("Направление       %s\n", dr->name);
+	printf("Время отправления %s\n=============================\n", dr->time);
+	printf("Всего поехало         %d\n", dr->places_occupied);
+	printf("За полную стоимость   %d\n", dr->places_occupied - (dr->discount - dr->halfcost - dr->nocost));
+	printf("По дисконту           %d\n", dr->discount);
+	printf("За полстоимости       %d\n", dr->halfcost);
+	printf("По безналу            %d\n", dr->nocost);
+	printf("-----------------------------\n");
+	printf("Итого:\n");
+	printf("	за полную стоимость  \%d рублей;\n", (dr->places_occupied - (dr->discount - dr->halfcost - dr->nocost))*pay->fullcost);
+	printf("	по дисконту          \%d рублей;\n", dr->discount*pay->discount);
+	printf("	за полстоимости      \%d рублей;\n", dr->halfcost*pay->halfcost);
+	printf("\nВсего за рейс \%d рублей.\n\n", dr->discount*pay->discount + dr->halfcost*pay->halfcost + (dr->places_occupied - (dr->discount - dr->halfcost - dr->nocost))*pay->fullcost);
+	dr->discount = 0;
+	dr->halfcost = 0;
+	dr->nocost = 0;
+};
 /**/
-/*void appendPassName(char * srcPointer, char * targetPointer){
-  targetPointer = movePointerToChar(targetPointer, '\0', 0);
-  targetPointer -= 1;
-  writePassName(srcPointer, targetPointer);
-  }
-*/
-/*
-        Функция передвигает указатель до указанного символа chr.
-Принимаемые переменные:
-
-        char * p_b - указатель на начало строки;
-        char chr - символ до которого передвинуть указатель;
-        int display - 1:сдвиг с выводом в терминал;
-                      0:просто сдвиг.
-Возвращаемое значение:
-
-        указатель на следующий за указанным символом.
-*/
-char * movePointerToChar(char * p_b, char chr, int display){
-        while(1){
-                if(*p_b == chr){
-                        //*(p_b++);
-                        p_b += 1;
-                        return p_b;
-                }
-                if(display) printf("%c", *p_b);
-                //*(p_b++);
-                p_b += 1;
-        }
-}
+void creatHeaderPM(char* p_strBuff, struct DirectReport* PM, struct Length* Len){
+		strncpy(PM->name, "Пинск-Минск", Len->directName);
+		char* p_strstr = strchr(p_strBuff, '>')+1;
+		strncpy(PM->date, p_strstr, Len->myDate);
+		p_strstr = strchr(p_strstr, ',')+2;
+		strncpy(PM->time, p_strstr, Len->myTime);
+		PM->done = 1;
+};
 /**/
-int numberOfSeatsToDigit(char * numberOfSeats){
-		int digit, result;
-		digit = charToDigit(numberOfSeats);
-		if(digit != -1){
-				result = digit;
-			}
-		result = digit;
-		digit = charToDigit(numberOfSeats);
-		if(digit != -1){
-				result = result * 10 + digit;
-			}
-		return result;
+void creatHeaderMP(char* p_strBuff, struct DirectReport* MP, struct Length* Len){
+		printf("Функция creatHeaderMP \%s\n", p_strBuff);
+		strncpy(MP->name, "Минск-Пинск", Len->directName);	
+		char* p_strstr = strchr(p_strBuff, '>')+1;
+		strncpy(MP->date, p_strstr, Len->myDate);
+		p_strstr = strchr(p_strstr, ',')+2;
+		strncpy(MP->time, p_strstr, Len->myTime);
+		MP->done = 1;
+};
+/**/
+void creatHeader(char* p_strBuff, struct DirectReport* curent_report, struct Length* Len){
+	char* p_strstr = strchr(p_strBuff, '>')+1;
+	strncpy(curent_report->date, p_strstr, Len->myDate);
+	p_strstr = strchr(p_strstr, ',')+2;
+	strncpy(curent_report->time, p_strstr, Len->myTime);
+	p_strstr = strchr(p_strstr, ',')+2;
+	strncpy(curent_report->name, p_strstr, Len->directName);
+	curent_report->done = 1;
+};
+/**/
+int getCount(char* p_strBuff){
+	char strTemp[2];
+	char* p_strstr = strchr(p_strBuff, '>')+1;
+	strncpy(strTemp, p_strstr, 2);
+	if(strTemp[1] == '<'){
+		strTemp[1] = '\0';
 	}
+	return (int)strtol(strTemp, NULL, 10);
+};
 /**/
-int charToDigit(char *p){
-        //printf("%c", *p);
-        switch(*p){
-                case '1':
-                        return 1;
-                case '2':
-                        return 2;
-                case '3':
-                        return 3;
-                case '4':
-                        return 4;
-                case '5':
-                        return 5;
-                case '6':
-                        return 6;
-                case '7':
-                        return 7;
-                case '8':
-                        return 8;
-                case '9':
-                        return 9;
-                case '0':
-                        return 0;
-        }
-        return -1;
-}
+int getStatus(char* p_strBuff){
+	if(strstr(p_strBuff, "Поехал") != NULL){
+		return 1;
+	}
+	return 0;
+};
 /*      Функция подсчитывает количество вхождений подстроки pattern в строку.
 Принимает переменные:
         указатель на искомую строку char * str;
@@ -220,34 +91,34 @@ int strInStrCount(char * str, char * pattern){
         int count = 0;
         while(*str != '\0'){
                 if(*str == *ptn){
-                        //*(ptn++);
                         ptn += 1;
                         if(*ptn == '\0'){
                                 count++;
                                 ptn = pattern;
                         }
                 }else ptn = pattern;
-                //*(str++);
                 str += 1;
         }
         return count;
-}
+};
 /**/
 int getDiscountCount(char * srcStr){
     int count = 0;
     count = strInStrCount(srcStr, "Д.К.");
+    count += strInStrCount(srcStr, "ДК");
     count += strInStrCount(srcStr, "Дк");
+    count += strInStrCount(srcStr, "Д.к.");
     count += strInStrCount(srcStr, "д.к."); 
     count += strInStrCount(srcStr, "дк");
 	return count;
-	}
+};
 /**/
-int getNoCashCount(char * srcStr){
-        int count = 0;
-        count = strInStr(srcStr, "бесплатно");
-        count += strInStr(srcStr, "б/н");
-        count += strInStr(srcStr, "безнал");
-        count += strInStr(srcStr, "безнл");
-        count += strInStr(srcStr, "оплачено");
-        return count;
-	}
+int getNoCostCount(char * srcStr){
+    int count = 0;
+    count = strInStrCount(srcStr, "бесплатно");
+    count += strInStrCount(srcStr, "б/н");
+    count += strInStrCount(srcStr, "безнал");
+    count += strInStrCount(srcStr, "безнл");
+    count += strInStrCount(srcStr, "оплачено"); 
+	return count;
+};
