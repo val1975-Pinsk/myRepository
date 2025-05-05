@@ -1,88 +1,42 @@
-#define     OpenTag     '<'      //  Открывающий тег 60
-#define     CloseTag    '>'      //  Закрывающий тег 62
+#ifndef REPORTTESTV2_H
+#define REPORTTESTV2_H
 
-#define     yes         1       //  да - 1
-#define     no          0       //  нет - 0
-#define     buffSize    256
+#define yes	1
+#define no	0
 
-#define     ERR         "Ошибка открытия... :(\n"
-#define     SUCS        "Файл открыт. :)\n"
-#define     OPENING     "Открытие файла:\n"
+struct Length{
+	int myDate;
+	int directName;
+	int myTime;
+	int buffer;
+};
 
-/*
-struct file_message_struct {
-  char * err;
-  char * sucs;
-  char * opening;
-} f_message = {ERR, SUCS, OPENING};
-*/
-struct PayReport {
-        int half;                                                       //      Количество пассажиров оплативших 17 рублей.
-        int discount;                                                   //      Количество пассажиров оплативших 30 рублей.
-        int full;                                                       //      Количество пассажиров оплативших 35 рублей.
-        int noCash;                                                     //      Количество пассажиров по безналу.
-	};
-struct PayValue {
-		int half;														//		
-		int discount;													//		
-		int full;														//		
-	};
-struct Total {
-		int half;
-		int discount;
-		int full;
-	};
-/*
-        Функция передвигает указатель до указанного символа chr.
-Возвращаемое значение указатель на следующий за указанным символом.
-*/
-extern char* movePointerToChar(char * p_b, char chr, int display);
-/*
-        Функция проверяет содержит ли строка подстроку.
-Функция принимает указатель на искомую строку str и указатель на шаблон pattern.
-Возвращаемое значение:
-        1-строка содержит шаблон;
-        0-не содержит.        
-*/
-extern int strInStr(char *str, char *pattern);
-/**/
-extern int getMonthDigit ();
-extern int getMonthDigit_2 ();
-/*
-        Функция проверяет является ли символ числом.
-Функция возвращает 1 - если символ число, иначе возвращается 0.
-*/
-extern int isDigit (int c);
-/**/
-extern void printPointerAddr(char * pointer);
-/**/
-extern int charToDigit(char *p);
-/*      Функция подсчитывает количество вхождений подстроки pattern в строку.
-Функция возвращает количество вхождений.*/
+struct DirectReport{
+	char*name;
+	char*time;
+	char* date;
+	int places_occupied;
+	int done;
+	int halfcost;
+	int discount;
+	int nocost;
+};
+
+struct Payment{
+	int fullcost;
+	int discount;
+	int halfcost;
+};
+
+extern char* getMallocCharBuff(int sizeBuff);
+extern void printHeader(struct DirectReport* dr, struct Payment* pay);
+extern void creatHeaderPM(char* p_strBuff, struct DirectReport* PM, struct Length* Len);
+extern void creatHeaderMP(char* p_strBuff, struct DirectReport* MP, struct Length* Len);
+//extern void creatHeader(char* p_strBuff, struct DirectReport* PM, struct DirectReport* MP, struct Length* Len);
+extern void creatHeader(char* p_strBuff, struct DirectReport* curent_report, struct Length* Len);
+extern int getCount(char* p_strBuff);
+extern int getStatus(char* p_strBuff);
 extern int strInStrCount(char * str, char * pattern);
-/**/
-extern void addStr(char * p_b, char * target, char start, char end);
-/**/
 extern int getDiscountCount(char * srcStr);
-/**/
-extern int getNoCashCount(char * srcStr);
-/**/
-extern int strIsName(char * srcStr);
-/**/
-extern int strIsNumberOfSeats(char * srcStr);
-/**/
-extern int strIsPayment(char * srcStr);
-/**/
-extern int strIsStatus(char * srcStr);
-/**/
-extern int isNoCash(char * srcStr);
-/**/
-extern void getContent(char * srcPointer, char * targetPointer);
-/**/
-extern void appendPassName(char * srcPointer, char * targetPointer);
-/**/
-extern void clearString(char * string, int sizeOfString);
-/**/
-extern int numberOfSeatsToDigit(char * numberOfSeats);
-/**/
-extern int isEndOfReport(char * srcStr);
+extern int getNoCostCount(char * srcStr);
+#endif
