@@ -1,5 +1,5 @@
-#ifndef REPORTTESTV2_H
-#define REPORTTESTV2_H
+#ifndef REPORT_H
+#define REPORT_H
 
 #define yes	1
 #define no	0
